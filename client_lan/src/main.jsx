@@ -5,7 +5,7 @@ import './index.css'
 import {io} from "socket.io-client";
 
 
-const socket = io("localhost:3000");
+const socket = io("172.16.6.1:3000");
 
 // const msg = {
 //   content : "Mon message",
