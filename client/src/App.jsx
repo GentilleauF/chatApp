@@ -30,12 +30,24 @@ function App({ socket }) {
 
 
   const messageElements = messages.map((message, i) => {
-    const date = (new Date(message.date)).toUTCString();
+    const dateFull = (new Date(message.date)).toUTCString();
+    const date = (new Date(message.date));
+    const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+    const alignment = message.author === author ? 'items-end' : 'items-start';
+    const colorDiv = message.author === author ? 'bg-green-300' : 'bg-blue-400'
+
     return (
-      <div key={i} className="message">
+      <div key={i} className={`message w-[50%] p-2 m-3 rounded flex flex-col ${alignment} ${colorDiv} `}>
+
         <p>{message.content}</p>
-        <p>{message.author}</p>
-        <p>{date}</p>
+        <div className='flex flex-row'>
+          <p className='pr-2'>{message.author}</p>
+          <p>{time}</p>
+        </div>
+
+
       </div>
     );
   });
@@ -44,6 +56,8 @@ function App({ socket }) {
   return (
     <div className='min-h-screen bg-slate-500'>
       <h1 className='text-xl text-center font-medium p-10'>Client Chat</h1>
+      <h1 className='text-xl text-center font-medium '>Hello {author}</h1>
+
       <div className='bg-slate-200 rounded absolute top-20 inset-x-1/4 h-60 ' hidden={author != null}>
         <form className='flex flex-col ' onSubmit={handleConnexion} >
           <div>
@@ -56,15 +70,20 @@ function App({ socket }) {
         </form>
       </div>
 
-      <form onSubmit={sendMessage} hidden={author == null}>
-        <input type="text" id="message" />
-        <button>Envoyer</button>
-      </form>
-      <div>
+
+      <div className='bg-white mx-36 mt-20 flex flex-col items-center rounded  '>
         {messageElements}
+
       </div>
+      <form className='mx-36 mt-5 flex justify-center' onSubmit={sendMessage} hidden={author == null}>
+        <input className='rounded w-[30%]' type="text" id="message" />
+        <button className='bg-slate-300 p-2 mx-2 rounded'>Envoyer</button>
+      </form>
+
     </div>
   )
 }
 
 export default App
+
+
